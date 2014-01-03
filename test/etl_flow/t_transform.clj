@@ -9,16 +9,32 @@
 
        (transform {:a 1 :b 2} [[:a ==> :c]]) => {:c 1}
        (transform {:a 1 :b 2} [[:a inc :a]]) => {:a 2}
-       (transform {:a 1 :b 2} [[:a ==> :x]]) => {:x 1})
+       (transform {:a 1 :b 2} [[:a ==> :x]]) => {:x 1}
+
+       (transform {"a" 1 "b" 2} [["a" ==> "x"]]) => {"x" 1}
+       (transform {1 "a" 2 "b"} [[1 ==> 9]])     => {9 "a"}
+       (transform {\a 1 \b 2}   [[\a ==> \c]])   => {\c 1}
+)
 
 (facts "about transform with multiple source fields"
        (transform {:a 1 :b 2} [[[:a :b] +   :c]]) => {:c 3}
-       (transform {:a 1 :b 2} [[[:a :b] ==> :c]]) => {:c [1 2]})
+       (transform {:a 1 :b 2} [[[:a :b] ==> :c]]) => {:c [1 2]}
+
+       (transform {:a 1 :b 2} [['(:a :b) +   :c]]) => {:c 3}
+       (transform {:a 1 :b 2} [['(:a :b) ==> :c]]) => {:c [1 2]}
+       (transform {:a 1 :b 2} [[#{:a :b} +   :c]]) => {:c 3}
+       (transform {:a 1 :b 2} [[#{:a :b} ==> :c]]) => {:c [1 2]}
+
+       (transform {"a" 1 "b" 2} [[["a" "b"] + "x"]]) => {"x" 3}
+       (transform {1 "a" 2 "b"} [[[1 2]    str 9]])  => {9 "ab"}
+       (transform {\a 1 \b 2}   [[[\a \b]   + \c]])  => {\c 3})
+
 
 (facts "about transform when assigning a static value to a target"
-       (transform {:a 1 :b 2} [[:a        "hello" :x]]) => {:x "hello"}
-       (transform {:a 1 :b 2} [[nil       "hello" :x]]) => {:x "hello"} 
-       (transform {:a 1 :b 2} [[:anything "hello" :x]]) => {:x "hello"}) 
+       (transform {:a 1 :b 2} [[:a        "hello" :x]])  => {:x "hello"}
+       (transform {:a 1 :b 2} [[nil       "hello" :x]])  => {:x "hello"} 
+       (transform {:a 1 :b 2} [[:anything "hello" :x]])  => {:x "hello"}
+       (transform {:a 1 :b 2} [[:anything "hello" "a"]]) => {"a" "hello"}) 
 
 (facts "about transform when assigning from a map"
        (transform {:a 1 :b 2} [[{:c 3} ==> :x]]) => {:x {:c 3}}
@@ -36,7 +52,9 @@
 (facts "about transform when assigning to all fields"
        (transform {:a 1 :b 2} [[:a ==> :*]])    => {:a 1}
        (transform {:a 1 :b 2} [[:a inc :*]])    => {:a 2}
-       (transform {:a 1 :b 2} [[[:a :b] + :*]]) => {:a 3 :b 3})
+       (transform {:a 1 :b 2} [[[:a :b] + :*]]) => {:a 3 :b 3}
+       (transform {:a 1 :b 2} [['(:a :b) + :*]]) => {:a 3 :b 3}
+       )
 
 (facts "about transform when assigning from and to 'all fields'"
        (transform {:a 1 :b 2} [[:* ==> :*]])   => {:a 1 :b 2}
