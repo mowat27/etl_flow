@@ -13,8 +13,7 @@
 
        (transform {"a" 1 "b" 2} [["a" ==> "x"]]) => {"x" 1}
        (transform {1 "a" 2 "b"} [[1 ==> 9]])     => {9 "a"}
-       (transform {\a 1 \b 2}   [[\a ==> \c]])   => {\c 1}
-)
+       (transform {\a 1 \b 2}   [[\a ==> \c]])   => {\c 1})
 
 (facts "about transform with multiple source fields"
        (transform {:a 1 :b 2} [[[:a :b] +   :c]]) => {:c 3}
