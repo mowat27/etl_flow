@@ -1,10 +1,14 @@
 # etl_flow
 
-A Clojure library designed to ... well, that part is up to you.
+A Clojure library for creating ETL-like transformation rules.
 
 ## Usage
 
-FIXME
+Leiningen
+
+```
+[etl_flow "0.1.0-SNAPSHOT"]
+```
 
 ## License
 
